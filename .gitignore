@@ -4,11 +4,15 @@
 *.class
 *.dll
 *.exe
+*.slo
+*.lo
 *.o
+*.obj
 *.so
 *.pyc
 *.pyo
 *.gch
+*.pch
 
 # Packages #
 ############
@@ -41,6 +45,10 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Editor generated #
+####################
+*~
 
 # Unneccesary media #
 #####################
