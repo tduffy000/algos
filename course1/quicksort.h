@@ -32,7 +32,6 @@ template <typename Comparable>
 void quickSortFirst( vector<Comparable> & a, int left, int right ) {
 
     if( left + CUTOFF <= right ) {
-      comparisons += right - left;
       const Comparable & pivot = a[left];
       int i = left + 1, j = right;
 
@@ -185,8 +184,7 @@ void quickSortRandom( vector<Comparable> & a, int left, int right ) {
  */
 template <typename Comparable>
 void quickSort( vector<Comparable> & a, string pivotType ) {
-  comparisons = 0;
-
+  
   if( pivotType == "first" ) {
     quickSortFirst( a, 0, a.size() - 1);
   } else if( pivotType == "last" ) {
@@ -197,7 +195,6 @@ void quickSort( vector<Comparable> & a, string pivotType ) {
     quickSortRandom( a, 0, a.size() - 1);
   } else cout << "That is not a valid pivot type!\n";
 
-  cout << comparisons << " comparisons were performed\n";
 }
 
 #endif
