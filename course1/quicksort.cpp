@@ -7,56 +7,32 @@
 #include <iostream>
 #include <fstream>
 
+
 using namespace std;
 
-void printVector( vector<int> v ) {
-  for( int i : v )
-    cout << i << " ";
-  cout << "\n";
-}
-
 int main() {
-/*
+
   // TEST quickSort
-  // medianOf3
-  cout << "Testing median of 3\n";
-  vector<int> a = {1, 5, 9, 2, 4, 6, 10, 15, 3};
+  cout << "First test: \n";
+  vector<int> a = generateRandomVector( 15, 30 );
   printVector( a );
-  quickSort( a, "median" );
+  quickSort( a, "first", true );
   printVector( a );
 
-  // left pivot
-  cout << "Testing first element pivot\n";
+  cout << "Second test: \n";
   vector<int> b = {3, 7 , 8, 2, 1, 6, 10, 12 , 4, 5};
   printVector( b );
-  quickSort( b, "first" );
+  quickSort( b );
   printVector( b );
 
-  // right pivot
-  cout << "Testing last element pivot\n";
+  cout << "Third test: \n";
   vector<int> c = {9, 4, 5, 3, 1, 6, 12, 15, 7, 8, 2};
   printVector( c );
-  quickSort( c, "last" );
+  quickSort( c, "random", true);
   printVector( c );
-*/
-  // Question
-  vector<int> nums( 10000, 0 );
-  string ln;
-  int counter = 0;
-  ifstream myfile( "QuickSort.txt" );
 
-  if( myfile.is_open() ) {
-
-    while( getline( myfile, ln ) ) {
-      int tmp = stoi( ln );
-      nums[counter] = tmp;
-      counter++;
-    }
-    myfile.close();
-    cout << "Finished loading file!\n";
-  } else cout << "Unable to read-in file\n";
-
-  // make 2 copies of nums
+  // QUIZ Question
+  vector<int> nums = readIn( "QuickSort.txt", 10000 );
   vector<int> numsTwo = nums;
   vector<int> numsThree = nums;
 

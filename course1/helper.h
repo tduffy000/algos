@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <stdlib.h>
+#include <fstream>
 
 using namespace std;
 
@@ -13,7 +15,7 @@ using namespace std;
  * Print vectors out to CLI.
  */
 template <typename Comparable>
-void printVector( vector<Comparable> v )
+void printVector( vector<Comparable> v ) {
   for( Comparable i : v )
     cout << i << " ";
   cout << "\n";
@@ -22,29 +24,28 @@ void printVector( vector<Comparable> v )
 /**
  * Generate a random vector of ints for sorting testing.
  */
-vector<int> generateRandom( int count, int range, bool unique ) {
+vector<int> generateRandomVector( int count, int range, bool unique = true ) {
   vector<int> out(count, 0);
-  if( unique && range > count )
+  if( unique && range < count )
     cout << "There aren't enough numbers in the range to make a unique vector of that size\n";
-
-  while( int i = 0; i < count; i++ ) {
-    tmp = rand() % range;
-
+  int i = 0;
+  while( i < count ) {
+    int tmp = rand() % range;
     if( unique ) {
-      if( std::find( out.begin(), out.end(), tmp ) != out.end() )
-        out[i] = tmp;
+      if( std::find( out.begin(), out.end(), tmp ) == out.end() )
+        out[i++] = tmp;
     } else {
-      out[i] = tmp;
+      out[i++] = tmp;
     }
   }
   return out;
 }
 
 /**
- * Load-in int source files from .txt
+ * Load-in int source vector files from .txt
  */
-vector<int> readIn( string fileName ) {
-  vector<int> out;
+vector<int> readIn( string fileName, int size ) {
+  vector<int> out(size , 0);
   string ln;
   int counter = 0;
   ifstream myfile( fileName );
@@ -52,7 +53,7 @@ vector<int> readIn( string fileName ) {
   if( myfile.is_open() ) {
     while( getline( myfile, ln ) ) {
       int tmp = stoi( ln );
-      nums[counter++] = tmp;
+      out[counter++] = tmp;
     }
     myfile.close();
     cout << "Finished loading file!\n";

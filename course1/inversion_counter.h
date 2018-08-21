@@ -7,10 +7,7 @@
 
 using namespace std;
 
-/*
- * Global counter of inversions.
- */
-static long long inversions;
+static long long inversions;  // global count of inversions
 
 /**
  * Implementation method that merges two sorted sub-arrays into one.
@@ -25,30 +22,24 @@ void mergeVectorsAndCount( vector<Comparable> & a, vector<Comparable> & tmp, int
   int leftEnd = rightPos - 1;
   int tmpPos = leftPos;
   int n = end - leftPos + 1;
-  
-  // while both sub-arrays are not empty
+
   while( leftPos <= leftEnd && rightPos <= end ) {
 
     if( a[leftPos] <= a[rightPos] ) {
       tmp[tmpPos++] = std::move( a[leftPos++] );
     } else {
       tmp[tmpPos++] = std::move( a[rightPos++] );
-      // count inversions if merging from right sub-array
-      // and left sub-array !empty
       inversions += leftEnd - leftPos + 1;
     }
   }
-  // now fill with remaining non-empty sub-array
-  // whichever did not break above loop
+
   while( leftPos <= leftEnd ) {
     tmp[tmpPos++] = std::move( a[leftPos++] );
   }
-
   while( rightPos <= end ) {
     tmp[tmpPos++] = std::move( a[rightPos++] );
   }
 
-  // over-write a with tmp results
   for( int i = 0; i < n; ++i, --end ) {
     a[ end ] = std::move( tmp[end] );
   }
@@ -65,10 +56,9 @@ template <typename Comparable>
 void mergeSortAndCount( vector<Comparable> & a, vector<Comparable> & tmp, int left, int right ) {
   if( left < right ) {
     int mid = (left + right) / 2;
-    // split into two (left & right) sub-arrays
+
     mergeSortAndCount(a, tmp, left, mid);
     mergeSortAndCount(a, tmp, mid + 1, right);
-    // merge sorted sub-arrays together
     mergeVectorsAndCount(a, tmp, left, mid + 1, right);
   }
 }

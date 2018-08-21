@@ -4,8 +4,55 @@
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
+#include "helper.h"
 
 using namespace std;
+
+static long long comparisons;
+static int CUTOFF = 3; // pass from quick to insertion sort (in Hybrid)
+
+/**
+ * Return the first element of array a which is the pivot.
+ */
+template <typename Comparable>
+Comparable & firstElementToPivot( vector<Comparable> & a, int left, int right ) {
+  return a[left];
+}
+
+/**
+ * Swap the last element and first element of array a to use as pivot.
+ */
+template <typename Comparable>
+void lastElementToPivot( vector<Comparable> & a, int left, int right ) {
+  std::swap( a[left], a[right] );
+}
+
+/**
+ * Return the median of the left-most, right-most, and middle (int division)
+ * elements of a. Move the pivot over to left-most of a.
+ */
+template <typename Comparable>
+void medianOf3ToPivot( vector<Comparable> & a, int left, int right ) {
+
+  int mid = ( left + right ) / 2;
+  if( a[mid] < a[left] )
+    std::swap( a[left], a[mid] );
+  if( a[right] < a[left] )
+    std::swap( a[left], a[right] );
+  if( a[right] < a[mid] )
+    std::swap( a[mid], a[right] );
+
+  std::swap( a[left], a[mid] );
+}
+
+/**
+ * Swap a random element and the first element of array a to use as a pivot.
+ */
+template <typename Comparable>
+void randomElementToPivot( vector<Comparable> & a, int left, int right ) {
+  int randomPos = rand() % ( right - left );
+  std::swap( a[left], a[randomPos] );
+}
 
 /**
  * Perform insertion sort on an array a.
@@ -23,156 +70,73 @@ void insertionSort( vector<Comparable> & a ) {
   }
 }
 
-static int CUTOFF = 1; // pass from quick to insertion sort
-
 /**
- * QuickSort using the first (left-most) position as the pivot.
+ * Perform the partition sub-routine for an array a to section everything larger
+ * or smaller than the pivot.
+ * @param a is the array to be sorted
+ * @param left, right are the left-most and right-most indices in a
+ * @param pivotType defines how to pick the pivot element
+ * @return the index of the pivot element in a
  */
 template <typename Comparable>
-void quickSortFirst( vector<Comparable> & a, int left, int right ) {
-
-    if( left + CUTOFF <= right ) {
-      const Comparable & pivot = a[left];
-      int i = left + 1, j = right;
-
-      while( i < j ) {
-
-        // walk over i & j until both find values on wrong side
-        while( a[++i] < pivot ) { }
-        while( pivot < a[--j] ) { }
-        // change places!
-        std::swap( a[i], a[j] );
-      }
-
-      // put the pivot back
-      std::swap( a[i], a[left] );
-
-      quickSortFirst( a, left, i - 1 );
-      quickSortFirst( a, i + 1, right );
-    }
-    // call insertion sort under threshold (CUTOFF)
-    else
-      insertionSort( a );
-}
-
-/**
- * QuickSort using the last (right-most) position as the pivot.
- */
-template <typename Comparable>
-void quickSortLast( vector<Comparable> & a, int left, int right ) {
-
-    if( left + CUTOFF <= right ) {
-      const Comparable & pivot = a[right];
-      int i = left, j = right - 1;
-
-      while( i < j ) {
-
-        // walk over i & j until both find values on wrong side
-        while( a[++i] < pivot ) { }
-        while( pivot < a[--j] ) { }
-        // change places!
-        std::swap( a[i], a[j] );
-      }
-
-      // put the pivot back
-      std::swap( a[i], a[right] );
-
-      quickSortLast( a, left, i - 1 );
-      quickSortLast( a, i + 1, right );
-    }
-    // call insertion sort under threshold (CUTOFF)
-    else
-      insertionSort( a );
-}
-
-/**
- * Return the median of the left-most, right-most, and middle (int division)
- * elements of a. Move the pivot over in a.
- * @param a the array to be sorted
- * @param left the index of the left-most element of the sub-array
- * @param right the index of the right-most element of the sub-array
- */
-template <typename Comparable>
-const Comparable & medianOf3( vector<Comparable> & a, int left, int right ) {
-
-  int mid = ( left + right ) / 2;
-  if( a[mid] < a[left] )
-    std::swap( a[left], a[mid] );
-  if( a[right] < a[left] )
-    std::swap( a[left], a[right] );
-  if( a[right] < a[mid] )
-    std::swap( a[mid], a[right] );
-
-  std::swap( a[mid], a[right - 1] );
-  return a[right - 1];
-}
-
-/**
- * Heavy lifter of quickSort recursive implementation of picking
- * medianOf3 to create pivot and then sorting left and right sub-
- * arrays, passing to insertionSort if the sub-array size falls below
- * the global CUTOFF.
- * @param a is the vector of Comparable objects to be sorted.
- * @param left is the left-most index of the sub-array
- * @param right is the right-most index of the sub-array
- * @return a is then sorted using quickSort/insertionSort hybrid.
- */
-template <typename Comparable>
-void quickSortMedian( vector<Comparable> & a, int left, int right ) {
-
-  if( left + CUTOFF <= right ) {
-    // find the pivot & swap
-    const Comparable & pivot = medianOf3( a, left, right );
-    int i = left, j = right - 1;
-
-    while( i < j ) {
-
-      // walk over i & j until both find values on wrong side
-      while( a[++i] < pivot ) { }
-      while( pivot < a[--j] ) { }
-      // change places!
-      std::swap( a[i], a[j] );
-    }
-
-    // put the pivot back
-    std::swap( a[i], a[right - 1] );
-
-    quickSortMedian( a, left, i - 1 );
-    quickSortMedian( a, i + 1, right );
+int partition( vector<Comparable> & a, int left, int right, string pivotType ) {
+  // pre-processing re-arrangement steps (if pivot != left-most element)
+  if( pivotType == "last" ) {
+    lastElementToPivot( a, left, right );
+  } else if( pivotType == "median" ) {
+    medianOf3ToPivot( a, left, right );
+  } else if( pivotType == "random" ) {
+    randomElementToPivot( a, left, right );
   }
-  // call insertion sort under threshold (CUTOFF)
-  else
-    insertionSort( a );
+  const Comparable & pivot = firstElementToPivot( a, left, right );
+
+  int i = left;
+  for( int j = left + 1; j <= right; j++ ) {
+    if( a[j] <= pivot ) {
+      std::swap( a[++i], a[j] );
+    }
+  }
+
+  std::swap( a[left], a[i] );  // restore pivot
+  return i;
 }
 
-template <typename Comparable>
-void quickSortRandom( vector<Comparable> & a, int left, int right ) {
-
-  if( left + CUTOFF <= right ) {
-    // find the pivot & swap
-    int randomPos = std::rand() % ( a.size() - 1 );
-    std::swap( a[randomPos], a[right] );
-    const Comparable & pivot = a[right];
-    int i = left, j = right - 1;
-
-    while( i < j ) {
-
-      // walk over i & j until both find values on wrong side
-      while( a[++i] < pivot ) { }
-      while( pivot < a[--j] ) { }
-      // change places!
-      std::swap( a[i], a[j] );
+/**
+ * Implementation method of quickSort that makes recursive calls.
+ */
+template<typename Comparable>
+void quickSort( vector<Comparable> & a, int left, int right, string pivotType ) {
+  // base cases
+  // two element array
+  if( right - left == 1 ) {
+    if( a[right] < a[left] ) {
+      std::swap( a[left], a[right] );
     }
-
-    // put the pivot back
-    std::swap( a[i], a[right] );
-
-    quickSortRandom( a, left, i - 1 );
-    quickSortRandom( a, i + 1, right );
+    comparisons++;
+  } else if( right <= left) {
+    // one element array: do nothing
+  } else {
+      comparisons += right - left;
+      int partIdx = partition( a, left, right, pivotType );
+      quickSort( a, left, partIdx - 1, pivotType );
+      quickSort( a, partIdx + 1, right, pivotType );
   }
-  // call insertion sort under threshold (CUTOFF)
-  else
+}
+
+/**
+ * Implementation method of quickSort using pass-off to insertionSort method.
+ */
+template<typename Comparable>
+void quickSortHybrid( vector<Comparable> & a, int left, int right, string pivotType ) {
+  // base case (pass to insertionSort)
+  comparisons += right - left;
+  if( left + CUTOFF <= right )
     insertionSort( a );
+  else {
+    int partIdx = partition( a, left, right, pivotType );
+    quickSortHybrid( a, left, partIdx - 1, pivotType );
+    quickSortHybrid( a, partIdx + 1, right, pivotType );
+  }
 }
 
 /**
@@ -180,21 +144,17 @@ void quickSortRandom( vector<Comparable> & a, int left, int right ) {
  * Comparable objects, using 3 possible pivot finder implementations.
  * @param a is a vector of unordered Comparable objects
  * @param pivotType is the method for selecting the pivot element of a.
- * @return a gets ordered by natural ordering.
+ * @param hybrid defines whether or not to use pass-off to insertionSort method.
+ * @return a ordered by natural ordering.
  */
 template <typename Comparable>
-void quickSort( vector<Comparable> & a, string pivotType ) {
-  
-  if( pivotType == "first" ) {
-    quickSortFirst( a, 0, a.size() - 1);
-  } else if( pivotType == "last" ) {
-    quickSortLast( a, 0, a.size() - 1);
-  } else if( pivotType == "median" ) {
-    quickSortMedian( a, 0, a.size() - 1);
-  } else if( pivotType == "random" ) {
-    quickSortRandom( a, 0, a.size() - 1);
-  } else cout << "That is not a valid pivot type!\n";
-
+void quickSort( vector<Comparable> & a, string pivotType = "first", bool hybrid = false ) {
+  comparisons = 0;
+  if( !hybrid )
+    quickSort( a, 0, a.size() - 1, pivotType );
+  else
+    quickSortHybrid( a, 0, a.size() - 1, pivotType );
+  cout << "Performed " << comparisons << " comparisons\n";
 }
 
 #endif

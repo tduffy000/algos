@@ -1,6 +1,7 @@
 #ifndef MERGE_SORT
 #define MERGE_SORT
 
+#include "helper.h"
 #include <vector>
 #include <functional>
 
@@ -20,7 +21,6 @@ void mergeVectors( vector<Comparable> & a, vector<Comparable> & tmp, int leftPos
   int tmpPos = leftPos;
   int n = end - leftPos + 1;
 
-  // while both sub-arrays are not empty
   while( leftPos <= leftEnd && rightPos <= end ) {
 
     if( a[leftPos] <= a[rightPos] ) {
@@ -29,8 +29,7 @@ void mergeVectors( vector<Comparable> & a, vector<Comparable> & tmp, int leftPos
       tmp[tmpPos++] = std::move( a[rightPos++] );
     }
   }
-  // now fill with remaining non-empty sub-array
-  // whichever did not break above loop
+
   while( leftPos <= leftEnd ) {
     tmp[tmpPos++] = std::move( a[leftPos++] );
   }
@@ -39,7 +38,6 @@ void mergeVectors( vector<Comparable> & a, vector<Comparable> & tmp, int leftPos
     tmp[tmpPos++] = std::move( a[rightPos++] );
   }
 
-  // over-write a with tmp results
   for( int i = 0; i < n; ++i, --end ) {
     a[ end ] = std::move( tmp[end] );
   }
@@ -56,10 +54,9 @@ template <typename Comparable>
 void mergeSort( vector<Comparable> & a, vector<Comparable> & tmp, int left, int right ) {
   if( left < right ) {
     int mid = (left + right) / 2;
-    // split into two (left & right) sub-arrays
+
     mergeSort(a, tmp, left, mid);
     mergeSort(a, tmp, mid + 1, right);
-    // merge sorted sub-arrays together
     mergeVectors(a, tmp, left, mid + 1, right);
   }
 }

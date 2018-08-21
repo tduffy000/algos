@@ -34,7 +34,7 @@ int main() {
   printVector( b );
 
   // quiz case
-  vector<int> nums(100000, 0);
+  vector<int> nums( 100000, 0 );
   string ln;
   int counter = 0;
   ifstream myfile( "IntegerArray.txt" );
