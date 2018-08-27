@@ -1,8 +1,10 @@
 /*
+ * @author Thomas Duffy
  * Testing environment for inversion counter (merge sort derived) algorithm.
  */
 
 #include "inversion_counter.h"
+#include "helper.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -10,14 +12,9 @@
 
 using namespace std;
 
-void printVector( vector<int> v ) {
-  for( int i : v )
-    cout << i << " ";
-  cout << "\n";
-}
-
 int main() {
-  // test case 1: mergeSortAndCount  
+  
+  // test case 1
   vector<int> a = { 1, 5, 9, 2, 7, 3, 10, 4, 15 };
   cout << "Unsorted array: ";
   printVector( a );
@@ -33,17 +30,19 @@ int main() {
   cout << "Sorted array: ";
   printVector( b );
 
-  // quiz case
+  // quiz case ( test before removing )
+  vector<int> nums = readIn( "IntegerArray.txt", 100000 );
+  /*
   vector<int> nums( 100000, 0 );
   string ln;
   int counter = 0;
   ifstream myfile( "IntegerArray.txt" );
-  
+
   if( myfile.is_open() ) {
 
     string progress = "";
     while( getline( myfile, ln ) ) {
-      
+
       int tmp = stoi( ln );
       nums[counter] = tmp;
       counter++;
@@ -55,8 +54,8 @@ int main() {
     myfile.close();
     cout << "Finished loading file!\n";
   } else cout << "Unable to read-in file\n";
-
+  */
   mergeSortAndCount( nums );
-  
+
   return 0;
 }

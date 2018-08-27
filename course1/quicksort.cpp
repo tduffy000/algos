@@ -1,8 +1,10 @@
 /*
+ * @author Thomas Duffy
  * Testing environment for quicksort algorithm.
  */
 
 #include "quicksort.h"
+#include "helper.h"
 #include <vector>
 #include <iostream>
 #include <fstream>

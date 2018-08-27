@@ -1,3 +1,7 @@
+/*
+ * @author Thomas Duffy
+ * Use random selection to find order statistics in an (un)ordered vector.
+ */
 #ifndef RANDOMSELECT
 #define RANDOMSELECT
 
@@ -9,12 +13,10 @@
 
 using namespace std;
 
-/**
- * Implement a random selector to find the ith order static of an input array a.
- */
+/* Implement a random selector to find the ith order stat of an input vector a */
 template <typename Comparable>
 Comparable randomSelect( vector<Comparable> & a, int left, int right, int n, int i ) {
-  // base case, array size = 1
+  // BASE CASE: array size = 1
   if( right <= left ) {
     return a[right];
   }

@@ -1,5 +1,6 @@
 /*
- * Helper methods for testing.
+ * @author Thomas Duffy
+ * Helper methods for testing searching/sorting algoritms.
  */
 
 #include <vector>
@@ -11,9 +12,7 @@
 
 using namespace std;
 
-/**
- * Print vectors out to CLI.
- */
+/* Print vectors out to CLI */
 template <typename Comparable>
 void printVector( vector<Comparable> v ) {
   for( Comparable i : v )
@@ -21,9 +20,7 @@ void printVector( vector<Comparable> v ) {
   cout << "\n";
 }
 
-/**
- * Generate a random vector of ints for sorting testing.
- */
+/* Generate a random vector of ints for sorting testing */
 vector<int> generateRandomVector( int count, int range, bool unique = true ) {
   vector<int> out(count, 0);
   if( unique && range < count )
@@ -41,9 +38,7 @@ vector<int> generateRandomVector( int count, int range, bool unique = true ) {
   return out;
 }
 
-/**
- * Load-in int source vector files from .txt
- */
+/* Load-in int source vector file(s) from .txt */
 vector<int> readIn( string fileName, int size ) {
   vector<int> out(size , 0);
   string ln;

@@ -1,7 +1,11 @@
+/**
+ * @author Thomas Duffy
+ * Implementation of recursive Merge Sort.
+ */
+
 #ifndef MERGE_SORT
 #define MERGE_SORT
 
-#include "helper.h"
 #include <vector>
 #include <functional>
 

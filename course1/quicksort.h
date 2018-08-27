@@ -1,27 +1,27 @@
+/**
+ * @author Thomas Duffy
+ * Implementation of QuickSort based on 4 separate pivot-selection strategies.
+ */
+
 #ifndef QUICKSORT
 #define QUICKSORT
 
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
-#include "helper.h"
 
 using namespace std;
 
 static long long comparisons;
 static int CUTOFF = 3; // pass from quick to insertion sort (in Hybrid)
 
-/**
- * Return the first element of array a which is the pivot.
- */
+/* Return the first element of array a which is the pivot */
 template <typename Comparable>
 Comparable & firstElementToPivot( vector<Comparable> & a, int left, int right ) {
   return a[left];
 }
 
-/**
- * Swap the last element and first element of array a to use as pivot.
- */
+/* Swap the last element and first element of array a to use as pivot */
 template <typename Comparable>
 void lastElementToPivot( vector<Comparable> & a, int left, int right ) {
   std::swap( a[left], a[right] );
@@ -45,9 +45,7 @@ void medianOf3ToPivot( vector<Comparable> & a, int left, int right ) {
   std::swap( a[left], a[mid] );
 }
 
-/**
- * Swap a random element and the first element of array a to use as a pivot.
- */
+/* Swap a random element and the first element of array a to use as a pivot */
 template <typename Comparable>
 void randomElementToPivot( vector<Comparable> & a, int left, int right ) {
   int randomPos = rand() % ( right - left );
@@ -101,20 +99,17 @@ int partition( vector<Comparable> & a, int left, int right, string pivotType ) {
   return i;
 }
 
-/**
- * Implementation method of quickSort that makes recursive calls.
- */
+/* Implementation method of quickSort that makes recursive calls */
 template<typename Comparable>
 void quickSort( vector<Comparable> & a, int left, int right, string pivotType ) {
-  // base cases
-  // two element array
+  // BASE CASE: two element array
   if( right - left == 1 ) {
     if( a[right] < a[left] ) {
       std::swap( a[left], a[right] );
     }
     comparisons++;
   } else if( right <= left) {
-    // one element array: do nothing
+    // BASE CASE: one element array: do nothing
   } else {
       comparisons += right - left;
       int partIdx = partition( a, left, right, pivotType );
@@ -123,12 +118,10 @@ void quickSort( vector<Comparable> & a, int left, int right, string pivotType ) 
   }
 }
 
-/**
- * Implementation method of quickSort using pass-off to insertionSort method.
- */
+/* Implementation method of quickSort using pass-off to insertionSort method */
 template<typename Comparable>
 void quickSortHybrid( vector<Comparable> & a, int left, int right, string pivotType ) {
-  // base case (pass to insertionSort)
+  // BASE CASE: pass to insertionSort
   comparisons += right - left;
   if( left + CUTOFF <= right )
     insertionSort( a );

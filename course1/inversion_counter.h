@@ -1,3 +1,8 @@
+/**
+ * @author Thomas Duffy
+ * Implementation of inversion counter when using mergeSort to sort vectors.
+ */
+
 #ifndef INVERSION_COUNTER
 #define INVERSION_COUNTER
 
@@ -63,10 +68,7 @@ void mergeSortAndCount( vector<Comparable> & a, vector<Comparable> & tmp, int le
   }
 }
 
-/**
- * Calls the mergeSort algorithm on an array.
- * @param a is an unsorted array of Comparable objects that we want to sort.
- */
+/* Calls the mergeSort algorithm on an (un)sorted vector. */
 template <typename Comparable>
 void mergeSortAndCount( vector<Comparable> & a ) {
   inversions = 0;
